@@ -25,6 +25,16 @@ namespace _3D_viewer
             DataContext = new MainWindowViewModel();
             InitializeComponent();
 
+           ///
+           /// 
+           /// 
+          //Vector a = new Vector(1.0, 2.0);
+          // Vector b = new Vector(3.0, 2.0);
+          // Vector c = a + b;
+          //double aL =  a.Length;
+          // double bL = b.Length;
+          // double cL = c.Length;
+            ///
             OpenTkControl.Start(new GLWpfControlSettings()
             {
                 MajorVersion = 1,
