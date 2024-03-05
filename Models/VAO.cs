@@ -32,6 +32,10 @@ namespace _3D_viewer.Models
         {
             Matrix4.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance, out projectionMatrix);
         }
+        public void SetModelMatrix(float angle, float axisX, float axisY, float axisZ)
+        {
+            modelMatrix = Matrix4.CreateFromAxisAngle(new Vector3(axisX, axisY, axisZ), 0.0175f * angle);
+        }
         public void RotateMatrix(float angle, float axisX, float axisY, float axisZ, string matrixName)
         {
             Vector3 rotate = new Vector3(axisX, axisY, axisZ);
@@ -42,7 +46,10 @@ namespace _3D_viewer.Models
                     modelMatrix = modelMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
                     break;
                 case "localMatrix":
-                    localMatrix =  Matrix4.CreateFromAxisAngle(rotate, angle) * localMatrix;
+                    localMatrix = localMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
+                    break;
+                case "viewMatrix":
+                    viewMatrix = viewMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
                     break;
             }
         }
@@ -54,7 +61,10 @@ namespace _3D_viewer.Models
                     modelMatrix = modelMatrix * Matrix4.CreateTranslation(x, y, z);
                     break;
                 case "localMatrix":
-                    localMatrix =   Matrix4.CreateTranslation(x, y, z) * localMatrix;
+                    localMatrix = localMatrix * Matrix4.CreateTranslation(x, y, z) ;
+                    break;
+                case "viewMatrix":
+                    viewMatrix = viewMatrix * Matrix4.CreateTranslation(x, y, z);
                     break;
             }
         }
@@ -84,8 +94,8 @@ namespace _3D_viewer.Models
             projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(0.785398f, 1.5f, 0.1f, 100f);
             viewMatrix = Matrix4.CreateTranslation(0, 0, -10);
             localMatrix = Matrix4.CreateTranslation(0, 0, 0);
-            modelMatrix = Matrix4.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), -0.785398f);
-
+            modelMatrix = Matrix4.CreateTranslation(0, 0, 0);
+           // modelMatrix = Matrix4.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), -0.785398f);
             CreateVAO(TrianglesVboVertex, TrianglesVboNormal, IDTriangles);
             CreateVAO(QuadsVboVertex, QuadsVboNormal, IDQuads);
 
