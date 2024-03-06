@@ -21,6 +21,7 @@ namespace _3D_viewer.Views.Windows
     {
         public test()
         {
+            int test2 = 0;
             InitializeComponent();
         }
     }
