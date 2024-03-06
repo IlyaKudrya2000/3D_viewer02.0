@@ -20,7 +20,8 @@ namespace _3D_viewer.Views.Windows
     public partial class test : Window
     {
         public test()
-        {
+        { 
+            int test = 0;
             InitializeComponent();
         }
     }
