@@ -19,18 +19,13 @@ using System.Security.Policy;
 using System.Xml.Linq;
 using System.Timers;
 using System.Windows.Documents;
+using System.Text.RegularExpressions;
 
 
 namespace _3D_viewer.ViewModels
 {
     internal class MainWindowViewModel : BaseViewModel
     {
-        private string _CurrentModelMartixMod;
-        public string CurrentModelMartixMod
-        {
-            get => _CurrentModelMartixMod;
-            set => Set(ref _CurrentModelMartixMod, value);
-        }
         #region Костыли надо как то исправить Отвечается за связь GL и ViewModel
         public GLWpfControl GLViewModel;
         #region Загрузка и рендер
@@ -66,8 +61,8 @@ namespace _3D_viewer.ViewModels
                 
                 for (int i = 0; i < CurrentIndexModel.Count; i++)
                 {
-                    _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(0.02f * (float)Direction.X, 0, 1, 0.0f, _CurrentMatrixMod);
-                    _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(0.02f * (float)Direction.Y, 1, 0, 0.0f, _CurrentMatrixMod);
+                    _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(0.2f * (float)Direction.X, 0, 1, 0.0f, _CurrentMatrixMod);
+                    _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(0.2f * (float)Direction.Y, 1, 0, 0.0f, _CurrentMatrixMod);
                 }
                 GLViewModel.InvalidateVisual();
                 
@@ -82,8 +77,8 @@ namespace _3D_viewer.ViewModels
                 for (int i = 0; i < CurrentIndexModel.Count; i++)
                 {
                     
-                    _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0, -0.02f * 1 * (float)Direction.Y, 0.0f, _CurrentMatrixMod);
-                    _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0.02f * 1 * (float)Direction.X, 0, 0.0f, _CurrentMatrixMod);
+                    _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0, -0.01f * 1 * (float)Direction.Y, 0.0f, _CurrentMatrixMod);
+                    _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0.01f * 1 * (float)Direction.X, 0, 0.0f, _CurrentMatrixMod);
                 }
                 GLViewModel.InvalidateVisual();
             }
@@ -157,7 +152,7 @@ namespace _3D_viewer.ViewModels
 
             for (int i = 0; i < CurrentIndexModel.Count; i++)
             {
-                _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(2 * 0.0175f, axis[0], axis[1], axis[2], _CurrentMatrixMod);
+                _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(axis[3], axis[0], axis[1], axis[2], _CurrentMatrixMod);
             }
           
             GLViewModel.InvalidateVisual();
@@ -203,12 +198,42 @@ namespace _3D_viewer.ViewModels
             }
             return CurrentIndexModels;
         }
+
         #endregion
 
+        private string _AngleX;
+        private string _AngleY;
+        private string _AngleZ;
+        public string AngleX
+        {
+            get => _AngleX;
+            set
+            {
+                Set(ref _AngleX, value);
+                OnRotateModelExecute("1 0 0 " + value);
+            }
+        }
+        public string AngleY
+        {
+            get => _AngleY;
+            set
+            {
+                Set(ref _AngleY, value);
+                OnRotateModelExecute("0 1 0 " + value);
+            }
+        }
+        public string AngleZ
+        {
+            get => _AngleZ;
+            set
+            {
+                Set(ref _AngleZ, value);
+                OnRotateModelExecute("0 0 1 " + value);
+            }
+        }
 
 
         private VaoManager _vaoManager;
-
         private CheckBoxList _checkBoxList;
         public CheckBoxList checkBoxList
         { 
