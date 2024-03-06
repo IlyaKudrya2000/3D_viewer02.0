@@ -14,7 +14,7 @@
         xmlns:glWpfControl="clr-namespace:OpenTK.Wpf;assembly=GLWpfControl" 
         
         mc:Ignorable="d"
-        Title="MainWindow" Height="466" Width="707">
+        Title="MainWindow" Height="500" Width="700">
 
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -24,7 +24,7 @@
     </Window.Resources>
 
 
-    <Grid HorizontalAlignment="Center" Width="687">
+    <Grid Width="700" Height="500">
 
 
 
@@ -58,44 +58,45 @@
 
                     <Grid Background="Red" Height="91">
                         <RepeatButton x:Name="ZPlusLocal" Content="Z+" HorizontalAlignment="Left"  VerticalAlignment="Top"  Delay="20"  Margin="68,14,0,0" 
-                                      Command="{Binding MoveModel}" CommandParameter="0 0 1" Width="20" Height="15"/>
+                                      Command="{Binding MoveModel}" CommandParameter="0 0 1 2" Width="20" Height="15"/>
                         <RepeatButton x:Name="ZMinusLocal" Content="Z-"   Delay="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,30,0,0" 
-                                      Command="{Binding MoveModel}" CommandParameter="0 0 -1" Width="20" Height="16"/>
+                                      Command="{Binding MoveModel}" CommandParameter="0 0 -1 2" Width="20" Height="16"/>
                         <RepeatButton x:Name="YMinusLocal" Content="Y-"   Delay="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="69,46,0,0"
-                                      Command="{Binding MoveModel}" CommandParameter="0 -1 0" Width="20" Height="15"/>
+                                      Command="{Binding MoveModel}" CommandParameter="0 -1 0 2" Width="20" Height="15"/>
                         <RepeatButton x:Name="XPlusLocal" Content="X+"   Delay="20" HorizontalAlignment="Right" VerticalAlignment="Top"
-                                      Command="{Binding MoveModel}" CommandParameter="1 0 0" Margin="0,23,30,0" Width="20" Height="15"/>
+                                      Command="{Binding MoveModel}" CommandParameter="1 0 0 2" Margin="0,23,30,0" Width="20" Height="15"/>
                         <RepeatButton x:Name="YPlusLocal" Content="Y+"   Delay="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,-1,0,0" 
-                                      Command="{Binding MoveModel}" CommandParameter="0 1 0" Width="20" Height="15"/>
+                                      Command="{Binding MoveModel}" CommandParameter="0 1 0 2" Width="20" Height="15"/>
                         <RepeatButton x:Name="XMinusLocal" Content="X-"   Delay="20" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                      Command="{Binding MoveModel}" CommandParameter="-1 0 0" Margin="48,22,0,0" Width="20" Height="14"/>
+                                      Command="{Binding MoveModel}" CommandParameter="-1 0 0 2" Margin="48,22,0,0" Width="20" Height="14"/>
                     </Grid>
 
                     <Grid Background="Aqua" Height="98">
                         <RepeatButton x:Name="ZRotPlusLocal" Content="Z+" HorizontalAlignment="Left"  VerticalAlignment="Top"  Delay="10"  Margin="68,14,0,0" 
-                            Command="{Binding RotateModel}" CommandParameter="0 0 1" Width="20" Height="15"/>
+                            Command="{Binding RotateModel}" CommandParameter="0 0 1 2" Width="20" Height="15"/>
                         <RepeatButton x:Name="ZRotMinusLocal" Content="Z-" Delay="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,30,0,0" 
-                            Command="{Binding RotateModel}" CommandParameter="0 0 -1" Width="20" Height="16"/>
+                            Command="{Binding RotateModel}" CommandParameter="0 0 -1 2" Width="20" Height="16"/>
                         <RepeatButton x:Name="YRotMinusLocal" Content="Y-" Delay="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="69,46,0,0"
-                            Command="{Binding RotateModel}" CommandParameter="0 -1 0" Width="20" Height="15"/>
+                            Command="{Binding RotateModel}" CommandParameter="0 -1 0 2" Width="20" Height="15"/>
                         <RepeatButton x:Name="XRotPlusLocal" Content="X+" Delay="10" HorizontalAlignment="Right" VerticalAlignment="Top"
-                            Command="{Binding RotateModel}" CommandParameter="1 0 0" Margin="0,23,30,0" Width="20" Height="15"/>
+                            Command="{Binding RotateModel}" CommandParameter="1 0 0 2" Margin="0,23,30,0" Width="20" Height="15"/>
                         <RepeatButton x:Name="YRotPlusLocal" Content="Y+" Delay="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,-1,0,0" 
-                            Command="{Binding RotateModel}" CommandParameter="0 1 0" Width="20" Height="15"/>
+                            Command="{Binding RotateModel}" CommandParameter="0 1 0 2" Width="20" Height="15"/>
                         <RepeatButton x:Name="XRotMinusLocal" Content="X-" Delay="10" HorizontalAlignment="Left" VerticalAlignment="Top"
-                            Command="{Binding RotateModel}" CommandParameter="-1 0 0" Margin="48,22,0,0" Width="20" Height="14"/>
+                            Command="{Binding RotateModel}" CommandParameter="-1 0 0 2" Margin="48,22,0,0" Width="20" Height="14"/>
                     </Grid>
                 </ItemsControl.Items>
             </ItemsControl>
         </Expander>
-        <Grid Margin="19,186,510,179">
+        <Grid Margin="19,186,510,218">
             <RadioButton x:Name="localMatrix" Content="Local" VerticalAlignment="Top" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="localMatrix" />
             <RadioButton x:Name="modelMatrix" Content="Model" VerticalAlignment="Center" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="modelMatrix"/>
             <RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>
-            
-            
-            </Grid>
-
-
         </Grid>
+        <TextBox HorizontalAlignment="Left" Margin="199,343,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleX}"/>
+        <TextBox HorizontalAlignment="Left" Margin="199,320,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleY}"/>
+        <TextBox HorizontalAlignment="Left" Margin="199,297,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleZ}"/>
+
+
+    </Grid>
 </Window>
