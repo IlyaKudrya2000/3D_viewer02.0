@@ -14,7 +14,8 @@
         xmlns:glWpfControl="clr-namespace:OpenTK.Wpf;assembly=GLWpfControl" 
         
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="900">
+        Title="MainWindow" 
+        Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
 
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -24,9 +25,10 @@
     </Window.Resources>
 
 
-    <Grid Height="600" Width="900">
+    <Grid>
 
-        <glWpfControl:GLWpfControl  x:Name="OpenTkControl" MouseMove="OpenTkControl_MouseMove" MouseLeftButtonDown="OpenTkControl_MouseLeftButtonDown"/>
+        <glWpfControl:GLWpfControl  x:Name="OpenTkControl" MouseMove="OpenTkControl_MouseMove" MouseLeftButtonDown="OpenTkControl_MouseLeftButtonDown" 
+                                    Margin="0,0,0,0" SizeChanged="OpenTkControl_SizeChanged" />
 
         <Menu HorizontalAlignment="Left" VerticalAlignment="Top" >
             <MenuItem Header="file" Command="{Binding AddObjFileCommand }">
@@ -40,13 +42,13 @@
                         <DataTemplate>
                             <StackPanel>
                                 <TextBlock Text="{Binding NameObjFile}"/>
-                                <Popup IsOpen="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placement="Bottom" PlacementTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
+                                <!--<Popup IsOpen="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placement="Bottom" PlacementTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
                                     <Grid>
                                         <TextBox HorizontalAlignment="Left" Margin="10,558,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleX}"/>
                                         <TextBox HorizontalAlignment="Left" Margin="10,534,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleY}"/>
                                         <TextBox HorizontalAlignment="Left" Margin="10,511,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleZ}"/>
                                     </Grid>
-                                </Popup>
+                                </Popup>-->
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -63,17 +65,24 @@
             <RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>
         </Grid>
         <Grid  Margin="0,410,640,0">
+            
             <ItemsControl ItemsSource="{Binding checkBoxList.value}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding NameObjFile}" Margin="5" FontSize="20" Foreground="White"/>
+                        <StackPanel Orientation="Horizontal" >
+                            <Grid Background="Red">
+                                <Grid.Clip>
+                                    <EllipseGeometry Center="20,20" RadiusX="30" RadiusY="10"/>
+                                </Grid.Clip>
+                                <TextBlock Text="{Binding NameObjFile}" Margin="5" FontSize="20" Foreground="White"/>
+                            </Grid>
                             <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
+        
 
 
     </Grid>

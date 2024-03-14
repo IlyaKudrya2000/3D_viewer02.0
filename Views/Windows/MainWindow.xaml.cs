@@ -25,29 +25,20 @@ namespace _3D_viewer
             DataContext = new MainWindowViewModel();
             InitializeComponent();
 
-           ///
-           /// 
-           /// 
-          //Vector a = new Vector(1.0, 2.0);
-          // Vector b = new Vector(3.0, 2.0);
-          // Vector c = a + b;
-          //double aL =  a.Length;
-          // double bL = b.Length;
-          // double cL = c.Length;
-            ///
             OpenTkControl.Start(new GLWpfControlSettings()
             {
                 MajorVersion = 1,
                 MinorVersion = 1,
                 RenderContinuously = false,
-                
+                UseDeviceDpi = true,
+
             });
             OpenTkControl.Loaded += new RoutedEventHandler(((MainWindowViewModel)DataContext).OnLoaded);
             ((MainWindowViewModel)DataContext).GLViewModel = OpenTkControl;
             OpenTkControl.Render += new Action<TimeSpan>(((MainWindowViewModel)DataContext).OnRendered);
 
             OpenTkControl.MouseMove += new MouseEventHandler(((MainWindowViewModel)DataContext).MouseMovee);
-            //OpenTkControl.MouseLeftButtonDown += new MouseEventHandler(((MainWindowViewModel)DataContext).MouseMovee);
+            
         }
 
         private void OpenTkControl_MouseMove(object sender, MouseEventArgs e)
@@ -57,6 +48,18 @@ namespace _3D_viewer
 
         private void OpenTkControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+
+        }
+
+        private void OpenTkControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // OpenTkControl.Width = Width;
+            // //OpenTkControl.Height = this.Height;
+            // //OpenTkControl.Width = this.Width;
+            // OpenTkControl.FrameBufferWidth = Width;
+            // GL.Viewport(1, 1000, 0, 0);
+            //OpenTkControl.RenderSize = (new Size(0, 0));
+            
 
         }
     }

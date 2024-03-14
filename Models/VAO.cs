@@ -89,7 +89,7 @@ namespace _3D_viewer.Models
         {
             viewMatrix = viewMatrix * Matrix4.CreateTranslation(x, y, z);
         }
-
+        
         public VAO(GeometricModel model, uint[] VBOs, int vboArrayCount, uint[] VAOId, int VAOCount)
         {
 
@@ -107,7 +107,7 @@ namespace _3D_viewer.Models
             QuadsCount = model.GetQuadsCount();
             TrianglesCount = model.GetTrianglesCount();
 
-            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(0.785398f, 1.5f, 0.1f, 100f);
+            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(0.785398f, 2f, 0.1f, 100f);
             viewMatrix = Matrix4.CreateTranslation(0, 0, -10);
             //localMatrix = Matrix4.CreateTranslation(0, 0, 0);
             //modelMatrix = Matrix4.CreateTranslation(0, 0, 0);

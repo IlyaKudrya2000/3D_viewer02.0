@@ -20,6 +20,7 @@ using System.Xml.Linq;
 using System.Timers;
 using System.Windows.Documents;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Media3D;
 
 
 namespace _3D_viewer.ViewModels
@@ -240,6 +241,35 @@ namespace _3D_viewer.ViewModels
             get => _checkBoxList; 
             set => Set(ref _checkBoxList, value); 
         }
+        private int _Width;
+        public int Width
+        {
+            get => _Width;
+            set
+            {
+                Set(ref _Width, value);
+                for (int i = 0; i < _vaoManager?.VAOs.Count; i++)
+                {
+                    _vaoManager.VAOs[i].SetProjectionMatrix(0.785398f, (float)_Width / _Height, 0.1f, 100f);
+                }
+                GLViewModel?.InvalidateVisual();
+            }
+        }
+        private int _Height;
+        public int Height
+        {
+            get => _Height;
+            set
+            {
+                Set(ref _Height, value);
+                for (int i = 0; i < _vaoManager?.VAOs.Count; i++)
+                {
+                    _vaoManager.VAOs[i].SetProjectionMatrix(0.785398f, (float)_Width / _Height, 0.1f, 100f);
+                }
+                GLViewModel?.InvalidateVisual();
+            }
+        }
+            
         public MainWindowViewModel()
         {
            
@@ -248,9 +278,12 @@ namespace _3D_viewer.ViewModels
             RotateModel = new LambdaCommand(OnRotateModelExecute, CanRotateModelExecute);
             SetModelMartixModCommand = new LambdaCommand(OnSetCurrentModelMartixModExecute, CanSetCurrentModelMatrixModExecute);
             checkBoxList = new CheckBoxList();
+            Height = 500;
+            Width = 700;
+
         }
 
-    }
+}
 
 
 }
