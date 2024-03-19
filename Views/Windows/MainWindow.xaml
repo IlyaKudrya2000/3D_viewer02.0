@@ -35,7 +35,7 @@
             </MenuItem>
         </Menu>
 
-        <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding checkBoxList.value}" Margin="725,9,0,306" SelectedIndex="0" CanUserAddRows="False" Width="175">
+        <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding list3DModel.informationAbout}"  SelectedIndex="0" CanUserAddRows="False" Width="221" HorizontalAlignment="Right" VerticalAlignment="Top">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="model name">
                     <DataGridTemplateColumn.CellTemplate>
@@ -44,9 +44,9 @@
                                 <TextBlock Text="{Binding NameObjFile}"/>
                                 <!--<Popup IsOpen="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placement="Bottom" PlacementTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
                                     <Grid>
-                                        <TextBox HorizontalAlignment="Left" Margin="10,558,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleX}"/>
-                                        <TextBox HorizontalAlignment="Left" Margin="10,534,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleY}"/>
-                                        <TextBox HorizontalAlignment="Left" Margin="10,511,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleZ}"/>
+                                        <TextBox HorizontalAlignment="Left" Margin="10,558,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding RotationXYZ[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBox HorizontalAlignment="Left" Margin="10,534,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding RotationXYZ[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBox HorizontalAlignment="Left" Margin="10,511,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding RotationXYZ[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                 </Popup>-->
                             </StackPanel>
@@ -56,17 +56,27 @@
                 <DataGridCheckBoxColumn Header="IsChecked" Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
-
+        <Grid Width="119" Height="123" Background="White" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Center" Width="120" Text="{Binding AngleY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Bottom" Width="120" Text="{Binding  AngleZ, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+        </Grid>
+        <Grid Width="119" Height="123" Background="White" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,128">
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding PositionX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Center" Width="120" Text="{Binding PositionY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Bottom" Width="120" Text="{Binding  PositionZ, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+        </Grid>
+        <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="140" Height="144">
+        </Grid>
 
         <Grid Margin="19,186,510,218">
-            
             <RadioButton x:Name="localMatrix" Content="Local" VerticalAlignment="Top" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="localMatrix" />
             <RadioButton x:Name="modelMatrix" Content="Model" VerticalAlignment="Center" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="modelMatrix"/>
             <RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>
         </Grid>
+
         <Grid  Margin="0,410,640,0">
-            
-            <ItemsControl ItemsSource="{Binding checkBoxList.value}">
+            <ItemsControl ItemsSource="{Binding list3DModel.informationAbout}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" >
@@ -82,8 +92,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-        
-
 
     </Grid>
+
 </Window>
