@@ -1,4 +1,4 @@
-﻿<Window x:Name="window" x:Class="_3D_viewer.MainWindow"
+<Window x:Name="window" x:Class="_3D_viewer.MainWindow"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -14,8 +14,7 @@
         xmlns:glWpfControl="clr-namespace:OpenTK.Wpf;assembly=GLWpfControl" 
         
         mc:Ignorable="d"
-        Title="MainWindow" 
-        Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
+        Title="MainWindow"  Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
 
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -25,25 +24,19 @@
     </Window.Resources>
 
 
-
-    <Grid Width="700" Height="500">
-
-        <glWpfControl:GLWpfControl  x:Name="OpenTkControl" MouseMove="OpenTkControl_MouseMove" MouseLeftButtonDown="OpenTkControl_MouseLeftButtonDown" 
-                                    Margin="0,0,0,0" SizeChanged="OpenTkControl_SizeChanged" MouseWheel="OpenTkControl_MouseWheel"/>
-
-
-
-
-        
-
     <Grid>
 
-
         <glWpfControl:GLWpfControl  x:Name="OpenTkControl" MouseMove="OpenTkControl_MouseMove" MouseLeftButtonDown="OpenTkControl_MouseLeftButtonDown" 
-                                    Margin="0,0,0,0" SizeChanged="OpenTkControl_SizeChanged" />
+                                    Margin="0,0,0,0"  MouseWheel="OpenTkControl_MouseWheel"/>
+
+
+
+
+
+
 
         <Menu HorizontalAlignment="Left" VerticalAlignment="Top" >
-            <MenuItem Header="file" Command="{Binding AddObjFileCommand }">
+            <MenuItem Header="file" Command="{Binding AddObjFileCommand }"  Height="20" Width="31">
             </MenuItem>
         </Menu>
 
@@ -66,7 +59,6 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridCheckBoxColumn Header="IsChecked" Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
-
                 <!--<DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -78,10 +70,9 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>-->
-
             </DataGrid.Columns>
         </DataGrid>
-        <Grid Width="119" Height="123" Background="White" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+        <!--<Grid Width="119" Height="123" Background="White" VerticalAlignment="Bottom" HorizontalAlignment="Right">
             <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
             <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Center" Width="120" Text="{Binding AngleY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
             <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Bottom" Width="120" Text="{Binding  AngleZ, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
@@ -92,32 +83,16 @@
             <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Bottom" Width="120" Text="{Binding  PositionZ, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
         </Grid>
         <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="140" Height="144">
-        </Grid>
+        </Grid>-->
 
-        <Grid Margin="19,186,510,218">
-            <RadioButton x:Name="localMatrix" Content="Local" VerticalAlignment="Top" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="localMatrix" />
-            <RadioButton x:Name="modelMatrix" Content="Model" VerticalAlignment="Center" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="modelMatrix"/>
+        <Grid Height="111" Width="106" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <RadioButton x:Name="localMatrix" Content="Local" VerticalAlignment="Top" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="localMatrix"  />
+            <RadioButton x:Name="modelMatrix" Content="Model" VerticalAlignment="Center" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="modelMatrix" />
             <!--<RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>-->
         </Grid>
 
-        <Grid  Margin="0,410,640,0">
-            <ItemsControl ItemsSource="{Binding list3DModel.informationAbout}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" >
-                            <Grid Background="Red">
-                                <Grid.Clip>
-                                    <EllipseGeometry Center="20,20" RadiusX="30" RadiusY="10"/>
-                                </Grid.Clip>
-                                <TextBlock Text="{Binding NameObjFile}" Margin="5" FontSize="20" Foreground="White"/>
-                            </Grid>
-                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Grid>
+
+        
 
     </Grid>
-
 </Window>
