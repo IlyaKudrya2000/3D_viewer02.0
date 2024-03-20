@@ -1,4 +1,4 @@
-﻿using _3D_viewer.Commands;
+using _3D_viewer.Commands;
 using _3D_viewer.Models;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Wpf;
@@ -51,7 +51,7 @@ namespace _3D_viewer.ViewModels
                     AngleX = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(0)).Split(' ')[0];
                     AngleY = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(0)).Split(' ')[1];
                     AngleZ = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(0)).Split(' ')[2];
-                    
+
                 }
                 GLViewModel.InvalidateVisual();
 
@@ -87,7 +87,7 @@ namespace _3D_viewer.ViewModels
             List<int> CurrentIndexModel = GetCurrentIndexModels();
             for (int i = 0; i < CurrentIndexModel.Count; i++)
             {
-                _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0, 0, e.Delta / 100, _CurrentMatrixMod);
+                _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0, 0, e.Delta / 100, "viewMatrix");
             }
             GLViewModel.InvalidateVisual();
         }
@@ -101,9 +101,9 @@ namespace _3D_viewer.ViewModels
         public ICommand SetModelMartixModCommand { get; set; }
         private void OnSetCurrentModelMartixModExecute(object sender)
         {
-            
+
             _CurrentMatrixMod = (string)sender;
-           // OnPropertyChanged(PositionX);
+            // OnPropertyChanged(PositionX);
 
         }
         private bool CanSetCurrentModelMatrixModExecute(object sender)
@@ -132,8 +132,8 @@ namespace _3D_viewer.ViewModels
         {
             return true;
         }
-        #endregion  
-          
+        #endregion
+
         #region Команда смещения модели
         public ICommand MoveModel { get; set; }
         private void OnMoveModelExecute(object sender)
@@ -152,9 +152,9 @@ namespace _3D_viewer.ViewModels
             return true;
         }
         #endregion
-        #region Команда установки вращение модели 
-        public ICommand SetRotateModel { get; set; }
-        private void OnSetRotateModelExecute(object sender)
+        #region Команда вращение модели 
+        public ICommand RotateModel { get; set; }
+        private void OnRotateModelExecute(object sender)
         {
             List<float> axis = StringToAxisListCommandParameter(sender);
             List<int> CurrentIndexModel = GetCurrentIndexModels();
@@ -164,28 +164,9 @@ namespace _3D_viewer.ViewModels
                 _vaoManager.VAOs[CurrentIndexModel[i]].SetLocalRotation(axis[3], axis[0], axis[1], axis[2]);
             }
 
-            GLViewModel?.InvalidateVisual();
+            GLViewModel.InvalidateVisual();
         }
-        private bool CanSetRotateModelExecute(object sender)
-        {
-            return true;
-        }
-        #endregion
-        #region Команда установки положения модели 
-        public ICommand SetPositionModel { get; set; }
-        private void OnSetPositionModelExecute(object sender)
-        {
-            List<float> axis = StringToAxisListCommandParameter(sender);
-            List<int> CurrentIndexModel = GetCurrentIndexModels();
-
-            for (int i = 0; i < CurrentIndexModel.Count; i++)
-            {
-                _vaoManager.VAOs[CurrentIndexModel[i]].SetLocalPosition(axis[0], axis[1], axis[2]);
-            }
-
-            GLViewModel?.InvalidateVisual();
-        }
-        private bool CanSetPositionModelExecute(object sender)
+        private bool CanRotateModelExecute(object sender)
         {
             return true;
         }
@@ -256,7 +237,7 @@ namespace _3D_viewer.ViewModels
         {
 
             get
-            {        
+            {
                 double numericValue;
                 if (double.TryParse(_PositionX, out numericValue))
                 {
@@ -270,7 +251,7 @@ namespace _3D_viewer.ViewModels
             }
             set
             {
-                Set(ref _PositionX, value!= string.Empty ? value : "0");
+                Set(ref _PositionX, value != string.Empty ? value : "0");
             }
         }
         public string PositionY
@@ -282,7 +263,8 @@ namespace _3D_viewer.ViewModels
                 {
                     OnSetPositionModelExecute("0 " + _PositionY + " 0");
                     return _PositionY;
-                } else
+                }
+                else
                 {
                     return "0";
                 }
@@ -299,16 +281,17 @@ namespace _3D_viewer.ViewModels
                 double numericValue;
                 if (double.TryParse(_PositionZ, out numericValue))
                 {
-                    OnSetPositionModelExecute("0 0 "+ _PositionZ);
+                    OnSetPositionModelExecute("0 0 " + _PositionZ);
                     return _PositionZ;
-                } else
+                }
+                else
                 {
                     return "0";
                 }
             }
             set
             {
-                Set(ref _PositionZ, value != string.Empty ? value : "0");           
+                Set(ref _PositionZ, value != string.Empty ? value : "0");
             }
         }
         #endregion
@@ -318,73 +301,33 @@ namespace _3D_viewer.ViewModels
         private string _AngleZ;
         public string AngleX
         {
-
-            get
-            {
-                double numericValue;
-                if (double.TryParse(_AngleX, out numericValue))
-                {
-                    OnSetRotateModelExecute("1 0 0 " + _AngleX);
-                    return _AngleX;
-                }
-                else
-                {
-                    return "0";
-                }
-            }
+            get => _AngleX;
             set
             {
-                Set(ref _AngleX, value != string.Empty ? value : "0");
+                Set(ref _AngleX, value);
+                OnRotateModelExecute("1 0 0 " + value);
             }
         }
         public string AngleY
         {
-            get
-            {
-                double numericValue;
-                if (double.TryParse(_AngleY, out numericValue))
-                {
-                    OnSetRotateModelExecute("0 1 0 " + _AngleY);
-                    return _AngleY;
-                }
-                else
-                {
-                    return "0";
-                }
-            }
+            get => _AngleY;
             set
             {
-                Set(ref _AngleY, value != string.Empty ? value : "0");
+                Set(ref _AngleY, value);
+                OnRotateModelExecute("0 1 0 " + value);
             }
         }
         public string AngleZ
         {
-            get
-            {
-                double numericValue;
-                if (double.TryParse(_AngleZ, out numericValue))
-                {
-                    OnSetRotateModelExecute("0 0 1 " + _AngleZ);
-                    return _AngleZ;
-                }
-                else
-                {
-                    return "0";
-                }
-            }
+            get => _AngleZ;
             set
             {
-                Set(ref _AngleZ, value != string.Empty ? value : "0");
+                Set(ref _AngleZ, value);
+                OnRotateModelExecute("0 0 1 " + value);
             }
         }
         #endregion
-        private VaoManager _vaoManager;
-        private List3DModel _list3DModel;
-        public List3DModel list3DModel
-        {
-            get => _list3DModel;
-            set => Set(ref _list3DModel, value);
-        }
+
         #region Связь высоты окна с матрицей прекции (соотношение сторон модели)
         private int _Width;
         public int Width
@@ -416,21 +359,25 @@ namespace _3D_viewer.ViewModels
         }
         #endregion
 
-        #region Список данный моделей
-
-        #endregion
+        private VaoManager _vaoManager;
+        private List3DModel _list3DModel;
+        public List3DModel list3DModel
+        {
+            get => _list3DModel;
+            set => Set(ref _list3DModel, value);
+        }
         public MainWindowViewModel()
         {
 
             AddObjFileCommand = new LambdaCommand(OnAddObjFileCommandExecuted, CanAddObjFileCommandExecuted);
             MoveModel = new LambdaCommand(OnMoveModelExecute, CanMoveModelExecute);
-            SetRotateModel = new LambdaCommand(OnSetRotateModelExecute, CanSetRotateModelExecute);
+            RotateModel = new LambdaCommand(OnRotateModelExecute, CanRotateModelExecute);
             SetModelMartixModCommand = new LambdaCommand(OnSetCurrentModelMartixModExecute, CanSetCurrentModelMatrixModExecute);
             SetPositionModel = new LambdaCommand(OnSetPositionModelExecute, CanSetPositionModelExecute);
             _list3DModel = new List3DModel();
             Height = 500;
             Width = 700;
-            
+
         }
 
     }
