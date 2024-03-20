@@ -14,7 +14,8 @@
         xmlns:glWpfControl="clr-namespace:OpenTK.Wpf;assembly=GLWpfControl" 
         
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="700">
+        Title="MainWindow" 
+        Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
 
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -22,6 +23,7 @@
     <Window.Resources>
 
     </Window.Resources>
+
 
 
     <Grid Width="700" Height="500">
@@ -32,8 +34,13 @@
 
 
 
-        <glWpfControl:GLWpfControl  x:Name="OpenTkControl" MouseMove="OpenTkControl_MouseMove" MouseLeftButtonDown="OpenTkControl_MouseLeftButtonDown"/>
+        
 
+    <Grid>
+
+
+        <glWpfControl:GLWpfControl  x:Name="OpenTkControl" MouseMove="OpenTkControl_MouseMove" MouseLeftButtonDown="OpenTkControl_MouseLeftButtonDown" 
+                                    Margin="0,0,0,0" SizeChanged="OpenTkControl_SizeChanged" />
 
         <Menu HorizontalAlignment="Left" VerticalAlignment="Top" >
             <MenuItem Header="file" Command="{Binding AddObjFileCommand }">
@@ -59,6 +66,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridCheckBoxColumn Header="IsChecked" Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+
                 <!--<DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -70,6 +78,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>-->
+
             </DataGrid.Columns>
         </DataGrid>
         <Grid Width="119" Height="123" Background="White" VerticalAlignment="Bottom" HorizontalAlignment="Right">
@@ -90,9 +99,6 @@
             <RadioButton x:Name="modelMatrix" Content="Model" VerticalAlignment="Center" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="modelMatrix"/>
             <!--<RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>-->
         </Grid>
-        <TextBox HorizontalAlignment="Left" Margin="199,343,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleX}"/>
-        <TextBox HorizontalAlignment="Left" Margin="199,320,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleY}"/>
-        <TextBox HorizontalAlignment="Left" Margin="199,297,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleZ}"/>
 
         <Grid  Margin="0,410,640,0">
             <ItemsControl ItemsSource="{Binding list3DModel.informationAbout}">
@@ -113,4 +119,5 @@
         </Grid>
 
     </Grid>
+
 </Window>

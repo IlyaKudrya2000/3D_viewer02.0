@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using _3D_viewer.Models;
 using OpenTK.Graphics.OpenGL;
-using _3D_viewer.Models;
-using System.Timers;
 namespace _3D_viewer.ViewModels
 {
     internal class VaoManager
@@ -21,14 +14,15 @@ namespace _3D_viewer.ViewModels
         /// <summary>Вызвать при загрузке OpenGL</summary>
         public VaoManager(string vertexfile, string fragmentfile)
         {
-            
+
             VAOs = new List<VAO>();
             currentVAO = new List<int>();
             shaderProgram = new ShaderProgram(vertexfile, fragmentfile);
             InitiVboIndex(0);
             InitiVAOId(0);
-            
+
         }
+
         public void DeleteVAO(int ID)
         {
             GL.DeleteVertexArray(VAOIds[ID]);
@@ -36,6 +30,7 @@ namespace _3D_viewer.ViewModels
             VAOs.RemoveAt(ID);
             VAOCount--;
         }
+
         private void InitiVboIndex(int count)
         {
             count = 4 * 1000; // 4 - количество индексов для одной модели, 20 - количество моделей 
@@ -54,7 +49,7 @@ namespace _3D_viewer.ViewModels
 
 
         }
-        public int AddGeometricModel(string fileName)
+        public VAO AddGeometricModel(string fileName)
         {
 
             GeometricModel model = new GeometricModel(fileName);
@@ -64,15 +59,15 @@ namespace _3D_viewer.ViewModels
             VAOCount++;
 
 
-            return VAOs.Count();
+            return VAOs.Last();
         }
         public void Draw()
         {
-              for (int i = 0; i < VAOCount; i++)
-              {
-                  VAOs[i].Draw(shaderProgram);
-              }   
-            
+            for (int i = 0; i < VAOCount; i++)
+            {
+                VAOs[i].Draw(shaderProgram);
+            }
+
         }
         public void SetCurrentModel(List<int> Models)
         {
@@ -82,6 +77,6 @@ namespace _3D_viewer.ViewModels
                 currentVAO.Add(Models[i]);
             }
         }
-        
+
     }
 }

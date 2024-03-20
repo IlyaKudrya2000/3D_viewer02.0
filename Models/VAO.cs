@@ -1,13 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
-
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
 namespace _3D_viewer.Models
@@ -50,6 +41,7 @@ namespace _3D_viewer.Models
         {
             Matrix4.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, (float)Math.Pow(10, 35), out projectionMatrix);
         }
+        #endregion
         public void SetModelMatrix(float angle, float axisX, float axisY, float axisZ)
         {
             modelMatrix = Matrix4.CreateFromAxisAngle(new Vector3(axisX, axisY, axisZ), 0.0175f * angle);
@@ -87,25 +79,25 @@ namespace _3D_viewer.Models
         public void RotateMatrix(float angle, float axisX, float axisY, float axisZ, string matrixName)
         {
             Vector3 rotate = new Vector3(axisX, axisY, axisZ);
-            
+
             switch (matrixName)
             {
                 case "modelMatrix":
                     AngleModel[0] += axisX * angle;
                     AngleModel[1] += axisY * angle;
                     AngleModel[2] += axisZ * angle;
-                   // modelMatrix = modelMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
+                    // modelMatrix = modelMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
                     break;
                 case "localMatrix":
                     AngleLocal[0] += axisX * angle;
                     AngleLocal[1] += axisY * angle;
                     AngleLocal[2] += axisZ * angle;
-                   // localMatrix = localMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
+                    // localMatrix = localMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
                     break;
                 case "viewMatrix":
                     //viewMatrix = viewMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
                     break;
-                    
+
             }
         }
         public void ShiftMatrix(float x, float y, float z, string matrixName)
@@ -116,19 +108,21 @@ namespace _3D_viewer.Models
                     PositionModel[0] += x;
                     PositionModel[1] += y;
                     PositionModel[2] += z;
-                   // modelMatrix = modelMatrix * Matrix4.CreateTranslation(x, y, z);
+                    // modelMatrix = modelMatrix * Matrix4.CreateTranslation(x, y, z);
                     break;
                 case "localMatrix":
                     PositionLocal[0] += x;
                     PositionLocal[1] += y;
                     PositionLocal[2] += z;
-                  //  localMatrix = localMatrix * Matrix4.CreateTranslation(x, y, z) ;
+                    //  localMatrix = localMatrix * Matrix4.CreateTranslation(x, y, z) ;
                     break;
                 case "viewMatrix":
+
                     PositionView[0] += x;
                     PositionView[1] += y;
                     PositionView[2] += z;
                     
+
                     break;
             }
         }
@@ -159,7 +153,7 @@ namespace _3D_viewer.Models
             viewMatrix = Matrix4.CreateTranslation(0, 0, -10);
             //localMatrix = Matrix4.CreateTranslation(0, 0, 0);
             //modelMatrix = Matrix4.CreateTranslation(0, 0, 0);
-            // modelMatrix = Matrix4.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), -0.785398f);
+            //modelMatrix = Matrix4.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), -0.785398f);
             AngleLocal = new float[3];
             AngleModel = new float[3];
             AngleView = new float[3];
@@ -187,15 +181,17 @@ namespace _3D_viewer.Models
         {
             shaderProgram.ActiveProgram();
 
-            modelMatrix = Matrix4.CreateTranslation(PositionModel[0], PositionModel[1], PositionModel[2])
-                * Matrix4.CreateFromAxisAngle(new Vector3(0, 0, 1), AngleModel[2] * (float)Math.PI / 180)
+            modelMatrix =
+                  Matrix4.CreateFromAxisAngle(new Vector3(0, 0, 1), AngleModel[2] * (float)Math.PI / 180)
                 * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), AngleModel[1] * (float)Math.PI / 180)
-                * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), AngleModel[0] * (float)Math.PI / 180);
+                * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), AngleModel[0] * (float)Math.PI / 180)
+                * Matrix4.CreateTranslation(PositionModel[0], PositionModel[1], PositionModel[2]);
 
-            localMatrix = Matrix4.CreateTranslation(PositionLocal[0], PositionLocal[1], PositionLocal[2])
-                * Matrix4.CreateFromAxisAngle(new Vector3(0, 0, 1), AngleLocal[2] * (float)Math.PI / 180)
+            localMatrix =
+                  Matrix4.CreateFromAxisAngle(new Vector3(0, 0, 1), AngleLocal[2] * (float)Math.PI / 180)
                 * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), AngleLocal[1] * (float)Math.PI / 180)
-                * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), AngleLocal[0] * (float)Math.PI / 180);
+                * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), AngleLocal[0] * (float)Math.PI / 180)
+                * Matrix4.CreateTranslation(PositionLocal[0], PositionLocal[1], PositionLocal[2]);
 
             viewMatrix = Matrix4.CreateTranslation(PositionView[0], PositionView[1], PositionView[2]);
             shaderProgram.SetUniform4("projection", projectionMatrix);
@@ -246,24 +242,3 @@ namespace _3D_viewer.Models
 
     }
 }
-
-/*private void CreateVAO(int VboVertex, int VboNormal, int ID)
-{
-
-    GL.BindVertexArray(ID);
-    GL.EnableClientState(ArrayCap.VertexArray);
-    GL.EnableClientState(ArrayCap.NormalArray);
-
-    GL.BindBuffer(BufferTarget.ArrayBuffer, VboVertex);
-    GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
-
-    GL.BindBuffer(BufferTarget.ArrayBuffer, VboNormal);
-    GL.NormalPointer(NormalPointerType.Float, 0, 0);
-
-    GL.BindVertexArray(0);
-    GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-    GL.DisableClientState(ArrayCap.VertexArray);
-    GL.DisableClientState(ArrayCap.NormalArray);
-    DeleteVBO(VboVertex, VboNormal);
-}*/

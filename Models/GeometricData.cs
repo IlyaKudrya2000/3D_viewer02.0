@@ -1,13 +1,5 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace _3D_viewer.Models
 {
@@ -28,20 +20,12 @@ namespace _3D_viewer.Models
         private float[] triangsArrayForVbo;
         private List<int>[] indexVerteces;
         private List<int>[] indexNornals;
-        public List<int>[] GetIndexVerteces() => indexVerteces;
-        public List<int>[] GetIndexNornals() => indexNornals;
-        public float[] GetNormals() => Normals;
         public float[] GetTriangsArrayForVbo() => triangsArrayForVbo;
         public float[] GetTriangNormalsArrayForVbo() => triangNormalsArrayForVbo;
         public float[] GetQuadsArrayForVbo() => quadsArrayForVbo;
         public float[] GetQuadNormalsArrayForVbo() => quadNormalsArrayForVbo;
-        public float[] GetPoins() => Points;
-        public int GetPointsCount() => PointsCount;
         public int GetQuadsCount() => QuadsCount;
         public int GetTrianglesCount() => TrianglesCount;
-        public int GetVertexsCount() => VertexsCount;
-        public int GetNornalCount() => NornalCount;
-
         private void CreateArraysForVbo()
         {
             quadsArrayForVbo = new float[QuadsCount * 12];
