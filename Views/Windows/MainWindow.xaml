@@ -25,7 +25,19 @@
     </Window.Resources>
 
 
+
+    <Grid Width="700" Height="500">
+
+        <glWpfControl:GLWpfControl  x:Name="OpenTkControl" MouseMove="OpenTkControl_MouseMove" MouseLeftButtonDown="OpenTkControl_MouseLeftButtonDown" 
+                                    Margin="0,0,0,0" SizeChanged="OpenTkControl_SizeChanged" MouseWheel="OpenTkControl_MouseWheel"/>
+
+
+
+
+        
+
     <Grid>
+
 
         <glWpfControl:GLWpfControl  x:Name="OpenTkControl" MouseMove="OpenTkControl_MouseMove" MouseLeftButtonDown="OpenTkControl_MouseLeftButtonDown" 
                                     Margin="0,0,0,0" SizeChanged="OpenTkControl_SizeChanged" />
@@ -54,6 +66,19 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridCheckBoxColumn Header="IsChecked" Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+
+                <!--<DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Button VerticalAlignment="Center" HorizontalAlignment="Center" Content="Delete" Command="{Binding DeleteObjFileCommand}"/>
+
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+
             </DataGrid.Columns>
         </DataGrid>
         <Grid Width="119" Height="123" Background="White" VerticalAlignment="Bottom" HorizontalAlignment="Right">
@@ -72,7 +97,7 @@
         <Grid Margin="19,186,510,218">
             <RadioButton x:Name="localMatrix" Content="Local" VerticalAlignment="Top" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="localMatrix" />
             <RadioButton x:Name="modelMatrix" Content="Model" VerticalAlignment="Center" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="modelMatrix"/>
-            <RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>
+            <!--<RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>-->
         </Grid>
 
         <Grid  Margin="0,410,640,0">

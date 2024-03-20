@@ -1,4 +1,10 @@
-﻿using System.Collections.ObjectModel;
+
+﻿using _3D_viewer.Commands;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Windows.Services.Maps;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Wpf;
 
 namespace _3D_viewer.ViewModels
 {
@@ -20,6 +26,30 @@ namespace _3D_viewer.ViewModels
 
             }
         }
+
+        private int _indexInColection;
+        private VaoManager _vaoManager;
+        private List3DModel _list3DModel;
+        //public InformationAbout(VaoManager vaoManager, int indexInColection, List3DModel list3DModel)
+        public InformationAbout()
+        {
+            //_list3DModel = list3DModel;
+            //_vaoManager = vaoManager;
+            //_indexInColection = indexInColection;
+            DeleteObjFileCommand = new LambdaCommand(OnDeleteObjFileCommandExecuted, CanDeleteObjFileCommandExecuted);
+        }
+        #region Команда Удаления модели
+        public ICommand DeleteObjFileCommand { get; set; }
+        private void OnDeleteObjFileCommandExecuted(object sender)
+        {
+            _vaoManager.DeleteVAO(_indexInColection);
+            _list3DModel.informationAbout.RemoveAt(_indexInColection);
+        }
+        private bool CanDeleteObjFileCommandExecuted(object sender)
+        {
+            return true;
+        }
+        #endregion 
     }
     internal class List3DModel : BaseViewModel
     {

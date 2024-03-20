@@ -81,6 +81,18 @@ namespace _3D_viewer.ViewModels
             }
         }
         #endregion
+        #region Движение по ОZ с помощью колёсика мыши
+        public void MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            List<int> CurrentIndexModel = GetCurrentIndexModels();
+            for (int i = 0; i < CurrentIndexModel.Count; i++)
+            {
+                _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0, 0, e.Delta / 100, _CurrentMatrixMod);
+            }
+            GLViewModel.InvalidateVisual();
+        }
+
+        #endregion 
         #endregion Костыли надо как то исправить 
 
         #region Команды
@@ -89,7 +101,10 @@ namespace _3D_viewer.ViewModels
         public ICommand SetModelMartixModCommand { get; set; }
         private void OnSetCurrentModelMartixModExecute(object sender)
         {
+            
             _CurrentMatrixMod = (string)sender;
+           // OnPropertyChanged(PositionX);
+
         }
         private bool CanSetCurrentModelMatrixModExecute(object sender)
         {
@@ -117,7 +132,8 @@ namespace _3D_viewer.ViewModels
         {
             return true;
         }
-        #endregion     
+        #endregion  
+          
         #region Команда смещения модели
         public ICommand MoveModel { get; set; }
         private void OnMoveModelExecute(object sender)
@@ -151,6 +167,25 @@ namespace _3D_viewer.ViewModels
             GLViewModel?.InvalidateVisual();
         }
         private bool CanSetRotateModelExecute(object sender)
+        {
+            return true;
+        }
+        #endregion
+        #region Команда установки положения модели 
+        public ICommand SetPositionModel { get; set; }
+        private void OnSetPositionModelExecute(object sender)
+        {
+            List<float> axis = StringToAxisListCommandParameter(sender);
+            List<int> CurrentIndexModel = GetCurrentIndexModels();
+
+            for (int i = 0; i < CurrentIndexModel.Count; i++)
+            {
+                _vaoManager.VAOs[CurrentIndexModel[i]].SetLocalPosition(axis[0], axis[1], axis[2]);
+            }
+
+            GLViewModel?.InvalidateVisual();
+        }
+        private bool CanSetPositionModelExecute(object sender)
         {
             return true;
         }

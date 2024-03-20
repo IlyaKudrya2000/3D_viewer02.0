@@ -38,7 +38,11 @@ namespace _3D_viewer
             OpenTkControl.Render += new Action<TimeSpan>(((MainWindowViewModel)DataContext).OnRendered);
 
             OpenTkControl.MouseMove += new MouseEventHandler(((MainWindowViewModel)DataContext).MouseMovee);
-            
+
+            OpenTkControl.MouseWheel += new MouseWheelEventHandler(((MainWindowViewModel)DataContext).MouseWheel);
+
+
+
         }
 
         private void OpenTkControl_MouseMove(object sender, MouseEventArgs e)
@@ -51,6 +55,10 @@ namespace _3D_viewer
 
         }
 
+
+        private void OpenTkControl_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+
         private void OpenTkControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // OpenTkControl.Width = Width;
@@ -60,6 +68,7 @@ namespace _3D_viewer
             // GL.Viewport(1, 1000, 0, 0);
             //OpenTkControl.RenderSize = (new Size(0, 0));
             
+
 
         }
     }

@@ -8,10 +8,10 @@ void main ()
 {
 	vec3 norm = normalize((Normals));
 
-	vec3 lightPos = vec3(10.0, 10.0, 10.0); 
+	vec3 lightPos = vec3(1000.0, 1000.0, 10000.0); 
 	vec3 lightColor = vec3(1.0, 1.0, 1.0);
 	vec3 ambient = vec3(0.3, 0.3, 0.3);
-	vec3 objectColor = vec3(0.11, 0.6, 0.62);
+	vec3 objectColor = vec3(0.3, 0.3, 0.3);
 
 
 
