@@ -26,6 +26,8 @@
 
     <Grid Width="700" Height="500">
 
+        <glWpfControl:GLWpfControl  x:Name="OpenTkControl" MouseMove="OpenTkControl_MouseMove" MouseLeftButtonDown="OpenTkControl_MouseLeftButtonDown" 
+                                    Margin="0,0,0,0" SizeChanged="OpenTkControl_SizeChanged" MouseWheel="OpenTkControl_MouseWheel"/>
 
 
 
@@ -38,65 +40,77 @@
             </MenuItem>
         </Menu>
 
-
-        <!--ItemsSource ="{Binding NameObjFile, UpdateSourceTrigger=PropertyChanged}"-->
-
-
-        <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding checkBoxList.value}" Margin="0,297,474,18" SelectedIndex="0"  CanUserAddRows="False" Width="175" >
-            <DataGrid.Columns >
-                <DataGridTextColumn Header="model name" Binding="{Binding NameObjFile}" />
+        <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ItemsSource="{Binding list3DModel.informationAbout}"  SelectedIndex="0" CanUserAddRows="False" Width="221" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="model name">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding NameObjFile}"/>
+                                <!--<Popup IsOpen="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Placement="Bottom" PlacementTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
+                                    <Grid>
+                                        <TextBox HorizontalAlignment="Left" Margin="10,558,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding RotationXYZ[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBox HorizontalAlignment="Left" Margin="10,534,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding RotationXYZ[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBox HorizontalAlignment="Left" Margin="10,511,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding RotationXYZ[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </Popup>-->
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridCheckBoxColumn Header="IsChecked" Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+                <!--<DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Button VerticalAlignment="Center" HorizontalAlignment="Center" Content="Delete" Command="{Binding DeleteObjFileCommand}"/>
+
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Width="119" Height="123" Background="White" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Center" Width="120" Text="{Binding AngleY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Bottom" Width="120" Text="{Binding  AngleZ, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+        </Grid>
+        <Grid Width="119" Height="123" Background="White" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,128">
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding PositionX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Center" Width="120" Text="{Binding PositionY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Bottom" Width="120" Text="{Binding  PositionZ, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+        </Grid>
+        <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="140" Height="144">
+        </Grid>
 
-
-        <Expander  Header="model" VerticalAlignment="Top" HorizontalAlignment="Right" Height="120"  Width="28" Margin="0,186,0,0" ExpandDirection="Left" Background="White">
-
-
-            <ItemsControl  HorizontalContentAlignment="Left" Width="138" Margin="-120,0,0,-72" Background="Green" HorizontalAlignment="Right">
-                <ItemsControl.Items>
-
-                    <Grid Background="Red" Height="91">
-                        <RepeatButton x:Name="ZPlusLocal" Content="Z+" HorizontalAlignment="Left"  VerticalAlignment="Top"  Delay="20"  Margin="68,14,0,0" 
-                                      Command="{Binding MoveModel}" CommandParameter="0 0 1 2" Width="20" Height="15"/>
-                        <RepeatButton x:Name="ZMinusLocal" Content="Z-"   Delay="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,30,0,0" 
-                                      Command="{Binding MoveModel}" CommandParameter="0 0 -1 2" Width="20" Height="16"/>
-                        <RepeatButton x:Name="YMinusLocal" Content="Y-"   Delay="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="69,46,0,0"
-                                      Command="{Binding MoveModel}" CommandParameter="0 -1 0 2" Width="20" Height="15"/>
-                        <RepeatButton x:Name="XPlusLocal" Content="X+"   Delay="20" HorizontalAlignment="Right" VerticalAlignment="Top"
-                                      Command="{Binding MoveModel}" CommandParameter="1 0 0 2" Margin="0,23,30,0" Width="20" Height="15"/>
-                        <RepeatButton x:Name="YPlusLocal" Content="Y+"   Delay="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,-1,0,0" 
-                                      Command="{Binding MoveModel}" CommandParameter="0 1 0 2" Width="20" Height="15"/>
-                        <RepeatButton x:Name="XMinusLocal" Content="X-"   Delay="20" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                      Command="{Binding MoveModel}" CommandParameter="-1 0 0 2" Margin="48,22,0,0" Width="20" Height="14"/>
-                    </Grid>
-
-                    <Grid Background="Aqua" Height="98">
-                        <RepeatButton x:Name="ZRotPlusLocal" Content="Z+" HorizontalAlignment="Left"  VerticalAlignment="Top"  Delay="10"  Margin="68,14,0,0" 
-                            Command="{Binding RotateModel}" CommandParameter="0 0 1 2" Width="20" Height="15"/>
-                        <RepeatButton x:Name="ZRotMinusLocal" Content="Z-" Delay="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,30,0,0" 
-                            Command="{Binding RotateModel}" CommandParameter="0 0 -1 2" Width="20" Height="16"/>
-                        <RepeatButton x:Name="YRotMinusLocal" Content="Y-" Delay="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="69,46,0,0"
-                            Command="{Binding RotateModel}" CommandParameter="0 -1 0 2" Width="20" Height="15"/>
-                        <RepeatButton x:Name="XRotPlusLocal" Content="X+" Delay="10" HorizontalAlignment="Right" VerticalAlignment="Top"
-                            Command="{Binding RotateModel}" CommandParameter="1 0 0 2" Margin="0,23,30,0" Width="20" Height="15"/>
-                        <RepeatButton x:Name="YRotPlusLocal" Content="Y+" Delay="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,-1,0,0" 
-                            Command="{Binding RotateModel}" CommandParameter="0 1 0 2" Width="20" Height="15"/>
-                        <RepeatButton x:Name="XRotMinusLocal" Content="X-" Delay="10" HorizontalAlignment="Left" VerticalAlignment="Top"
-                            Command="{Binding RotateModel}" CommandParameter="-1 0 0 2" Margin="48,22,0,0" Width="20" Height="14"/>
-                    </Grid>
-                </ItemsControl.Items>
-            </ItemsControl>
-        </Expander>
         <Grid Margin="19,186,510,218">
             <RadioButton x:Name="localMatrix" Content="Local" VerticalAlignment="Top" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="localMatrix" />
             <RadioButton x:Name="modelMatrix" Content="Model" VerticalAlignment="Center" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="modelMatrix"/>
-            <RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>
+            <!--<RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>-->
         </Grid>
         <TextBox HorizontalAlignment="Left" Margin="199,343,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleX}"/>
         <TextBox HorizontalAlignment="Left" Margin="199,320,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleY}"/>
         <TextBox HorizontalAlignment="Left" Margin="199,297,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleZ}"/>
 
+        <Grid  Margin="0,410,640,0">
+            <ItemsControl ItemsSource="{Binding list3DModel.informationAbout}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" >
+                            <Grid Background="Red">
+                                <Grid.Clip>
+                                    <EllipseGeometry Center="20,20" RadiusX="30" RadiusY="10"/>
+                                </Grid.Clip>
+                                <TextBlock Text="{Binding NameObjFile}" Margin="5" FontSize="20" Foreground="White"/>
+                            </Grid>
+                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
 
     </Grid>
 </Window>

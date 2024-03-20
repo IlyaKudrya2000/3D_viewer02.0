@@ -29,16 +29,61 @@ namespace _3D_viewer.Models
         Matrix4 projectionMatrix;
         private float[] AngleLocal;
         private float[] AngleModel;
+        private float[] AngleView;
         private float[] PositionLocal;
         private float[] PositionModel;
+        private const int localModFlag = 0;
+        private const int ModelModFlag = 1;
+        #region Получить Данные о положении модели
+        /// <summary>0 - Local matrix , 1 - model matrix</summary>
+        public float[] GetAngle(int modFlag = ModelModFlag) => modFlag == localModFlag ? AngleLocal : AngleModel;
+
+
+        /// <summary>0 - Local matrix , 1 - model matrix</summary>
+        public float[] GetPosition(int modFlag = ModelModFlag) => modFlag == localModFlag ? PositionLocal : PositionModel;
+        
+
+        #endregion
+        #region Установщики положения в пространстве 
+        #region Матрица проекции
         public void SetProjectionMatrix(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance)
         {
-            Matrix4.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance, out projectionMatrix);
+            Matrix4.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, (float)Math.Pow(10, 35), out projectionMatrix);
         }
         public void SetModelMatrix(float angle, float axisX, float axisY, float axisZ)
         {
             modelMatrix = Matrix4.CreateFromAxisAngle(new Vector3(axisX, axisY, axisZ), 0.0175f * angle);
         }
+        #region Вращение
+        public void SetLocalRotation(float angle, float axisX, float axisY, float axisZ)
+        {
+            AngleLocal[0] = axisX == 0 ? AngleLocal[0] : angle * axisX;
+            AngleLocal[1] = axisY == 0 ? AngleLocal[1] : angle * axisY;
+            AngleLocal[2] = axisZ == 0 ? AngleLocal[2] : angle * axisZ;
+        }
+        public void SetLocalPosition(float axisX, float axisY, float axisZ)
+        {
+            PositionLocal[0] = axisX == 0 ? PositionLocal[0] : axisX;
+            PositionLocal[1] = axisY == 0 ? PositionLocal[1] : axisY;
+            PositionLocal[2] = axisZ == 0 ? PositionLocal[2] : axisZ;
+        }
+        public void SetModelRotation(float angle, float axisX, float axisY, float axisZ)
+        {
+            AngleModel[0] = axisX * angle;
+            AngleModel[1] = axisY * angle;
+            AngleModel[2] = axisZ * angle;
+        }
+        #endregion
+        #region Положение
+        public void SetModelPosition(float axisXPos, float axisYPos, float axisZPos)
+        {
+            AngleModel[0] = axisXPos;
+            AngleModel[1] = axisYPos;
+            AngleModel[2] = axisZPos;
+        }
+        
+        #endregion
+        #endregion
         public void RotateMatrix(float angle, float axisX, float axisY, float axisZ, string matrixName)
         {
             Vector3 rotate = new Vector3(axisX, axisY, axisZ);
@@ -80,7 +125,10 @@ namespace _3D_viewer.Models
                   //  localMatrix = localMatrix * Matrix4.CreateTranslation(x, y, z) ;
                     break;
                 case "viewMatrix":
-                  //  viewMatrix = viewMatrix * Matrix4.CreateTranslation(x, y, z);
+                    PositionView[0] += x;
+                    PositionView[1] += y;
+                    PositionView[2] += z;
+                    
                     break;
             }
         }
@@ -107,16 +155,18 @@ namespace _3D_viewer.Models
             QuadsCount = model.GetQuadsCount();
             TrianglesCount = model.GetTrianglesCount();
 
-            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(0.785398f, 1.5f, 0.1f, 100f);
+            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(0.785398f, 2f, 0.1f, 100f);
             viewMatrix = Matrix4.CreateTranslation(0, 0, -10);
             //localMatrix = Matrix4.CreateTranslation(0, 0, 0);
             //modelMatrix = Matrix4.CreateTranslation(0, 0, 0);
             // modelMatrix = Matrix4.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), -0.785398f);
             AngleLocal = new float[3];
             AngleModel = new float[3];
+            AngleView = new float[3];
             PositionLocal = new float[3];
             PositionModel = new float[3];
-
+            PositionView = new float[3];
+            PositionView[2] = -10;
             CreateVAO(TrianglesVboVertex, TrianglesVboNormal, IDTriangles);
             CreateVAO(QuadsVboVertex, QuadsVboNormal, IDQuads);
 
@@ -147,6 +197,7 @@ namespace _3D_viewer.Models
                 * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), AngleLocal[1] * (float)Math.PI / 180)
                 * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), AngleLocal[0] * (float)Math.PI / 180);
 
+            viewMatrix = Matrix4.CreateTranslation(PositionView[0], PositionView[1], PositionView[2]);
             shaderProgram.SetUniform4("projection", projectionMatrix);
             shaderProgram.SetUniform4("model", modelMatrix);
             shaderProgram.SetUniform4("view", viewMatrix);
@@ -185,6 +236,12 @@ namespace _3D_viewer.Models
             GL.DeleteBuffer(vboNormal);
             //GL.DeleteBuffer(vboColor);
         }
+        public void Delete(uint ID)
+        {
+          //  GL.BindVertexArray(0);
+            GL.DeleteVertexArray(ID);
+        }
+        
 
 
     }

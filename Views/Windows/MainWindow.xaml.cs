@@ -47,7 +47,9 @@ namespace _3D_viewer
             OpenTkControl.Render += new Action<TimeSpan>(((MainWindowViewModel)DataContext).OnRendered);
 
             OpenTkControl.MouseMove += new MouseEventHandler(((MainWindowViewModel)DataContext).MouseMovee);
-            //OpenTkControl.MouseLeftButtonDown += new MouseEventHandler(((MainWindowViewModel)DataContext).MouseMovee);
+            OpenTkControl.MouseWheel += new MouseWheelEventHandler(((MainWindowViewModel)DataContext).MouseWheel);
+
+
         }
 
         private void OpenTkControl_MouseMove(object sender, MouseEventArgs e)
@@ -56,6 +58,11 @@ namespace _3D_viewer
         }
 
         private void OpenTkControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void OpenTkControl_MouseWheel(object sender, MouseWheelEventArgs e)
         {
 
         }

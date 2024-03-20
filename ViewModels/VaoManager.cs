@@ -29,7 +29,13 @@ namespace _3D_viewer.ViewModels
             InitiVAOId(0);
             
         }
-        
+        public void DeleteVAO(int ID)
+        {
+            GL.DeleteVertexArray(VAOIds[ID]);
+           // VAOs[ID].Delete((uint)ID);
+            VAOs.RemoveAt(ID);
+            VAOCount--;
+        }
         private void InitiVboIndex(int count)
         {
             count = 4 * 1000; // 4 - количество индексов для одной модели, 20 - количество моделей 

@@ -63,6 +63,11 @@ namespace _3D_viewer.ViewModels
                 {
                     _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(0.2f * (float)Direction.X, 0, 1, 0.0f, _CurrentMatrixMod);
                     _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(0.2f * (float)Direction.Y, 1, 0, 0.0f, _CurrentMatrixMod);
+                    //list3DModel.informationAbout[CurrentIndexModel[i]].RotationXYZ = (string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngleLocal())).Split(' ');
+                    AngleX = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(0)).Split(' ')[0];
+                    AngleY = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(0)).Split(' ')[1];
+                    AngleZ = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(0)).Split(' ')[2];
+                    
                 }
                 GLViewModel.InvalidateVisual();
                 
@@ -79,6 +84,9 @@ namespace _3D_viewer.ViewModels
                     
                     _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0, -0.01f * 1 * (float)Direction.Y, 0.0f, _CurrentMatrixMod);
                     _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0.01f * 1 * (float)Direction.X, 0, 0.0f, _CurrentMatrixMod);
+                    PositionX = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(0)).Split(' ')[0];
+                    PositionY = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(0)).Split(' ')[1];
+                    PositionZ = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(0)).Split(' ')[2];
                 }
                 GLViewModel.InvalidateVisual();
             }
@@ -88,6 +96,18 @@ namespace _3D_viewer.ViewModels
             }
         }
         #endregion
+        #region Движение по ОZ с помощью колёсика мыши
+        public void MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            List<int> CurrentIndexModel = GetCurrentIndexModels();
+            for (int i = 0; i < CurrentIndexModel.Count; i++)
+            {
+                _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0, 0, e.Delta / 100, _CurrentMatrixMod);
+            }
+            GLViewModel.InvalidateVisual();
+        }
+
+        #endregion 
         #endregion Костыли надо как то исправить 
 
         #region Команды
@@ -96,7 +116,10 @@ namespace _3D_viewer.ViewModels
         public ICommand SetModelMartixModCommand { get; set; }
         private void OnSetCurrentModelMartixModExecute(object sender)
         {
+            
             _CurrentMatrixMod = (string)sender;
+           // OnPropertyChanged(PositionX);
+
         }
         private bool CanSetCurrentModelMatrixModExecute(object sender)
         {
@@ -124,7 +147,8 @@ namespace _3D_viewer.ViewModels
         {
             return true;
         }
-        #endregion     
+        #endregion  
+          
         #region Команда смещения модели
         public ICommand MoveModel {  get; set; }
         private void OnMoveModelExecute(object sender)
@@ -152,12 +176,31 @@ namespace _3D_viewer.ViewModels
 
             for (int i = 0; i < CurrentIndexModel.Count; i++)
             {
-                _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(axis[3], axis[0], axis[1], axis[2], _CurrentMatrixMod);
+                _vaoManager.VAOs[CurrentIndexModel[i]].SetLocalRotation(axis[3], axis[0], axis[1], axis[2]);
             }
           
             GLViewModel.InvalidateVisual();
         }
         private bool CanRotateModelExecute(object sender)
+        {
+            return true;
+        }
+        #endregion
+        #region Команда установки положения модели 
+        public ICommand SetPositionModel { get; set; }
+        private void OnSetPositionModelExecute(object sender)
+        {
+            List<float> axis = StringToAxisListCommandParameter(sender);
+            List<int> CurrentIndexModel = GetCurrentIndexModels();
+
+            for (int i = 0; i < CurrentIndexModel.Count; i++)
+            {
+                _vaoManager.VAOs[CurrentIndexModel[i]].SetLocalPosition(axis[0], axis[1], axis[2]);
+            }
+
+            GLViewModel?.InvalidateVisual();
+        }
+        private bool CanSetPositionModelExecute(object sender)
         {
             return true;
         }
@@ -201,6 +244,71 @@ namespace _3D_viewer.ViewModels
 
         #endregion
 
+        #region Отбражение положения модели по осям
+        private string _PositionX;
+        private string _PositionY;
+        private string _PositionZ;
+        public string PositionX
+        {
+
+            get
+            {        
+                double numericValue;
+                if (double.TryParse(_PositionX, out numericValue))
+                {
+                    OnSetPositionModelExecute(_PositionX + " 0 0");
+                    return _PositionX;
+                }
+                else
+                {
+                    return "0";
+                }
+            }
+            set
+            {
+                Set(ref _PositionX, value!= string.Empty ? value : "0");
+            }
+        }
+        public string PositionY
+        {
+            get
+            {
+                double numericValue;
+                if (double.TryParse(_PositionY, out numericValue))
+                {
+                    OnSetPositionModelExecute("0 " + _PositionY + " 0");
+                    return _PositionY;
+                } else
+                {
+                    return "0";
+                }
+            }
+            set
+            {
+                Set(ref _PositionY, value != string.Empty ? value : "0");
+            }
+        }
+        public string PositionZ
+        {
+            get
+            {
+                double numericValue;
+                if (double.TryParse(_PositionZ, out numericValue))
+                {
+                    OnSetPositionModelExecute("0 0 "+ _PositionZ);
+                    return _PositionZ;
+                } else
+                {
+                    return "0";
+                }
+            }
+            set
+            {
+                Set(ref _PositionZ, value != string.Empty ? value : "0");           
+            }
+        }
+        #endregion
+        #region Отбражение угол наклона модели по осям
         private string _AngleX;
         private string _AngleY;
         private string _AngleZ;
@@ -247,7 +355,11 @@ namespace _3D_viewer.ViewModels
             MoveModel = new LambdaCommand(OnMoveModelExecute, CanMoveModelExecute);
             RotateModel = new LambdaCommand(OnRotateModelExecute, CanRotateModelExecute);
             SetModelMartixModCommand = new LambdaCommand(OnSetCurrentModelMartixModExecute, CanSetCurrentModelMatrixModExecute);
-            checkBoxList = new CheckBoxList();
+            SetPositionModel = new LambdaCommand(OnSetPositionModelExecute, CanSetPositionModelExecute);
+            _list3DModel = new List3DModel();
+            Height = 500;
+            Width = 700;
+            
         }
 
     }
