@@ -1,12 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using OpenTK.Graphics.OpenGL;
 using _3D_viewer.Models;
-using System.Timers;
+using OpenTK.Graphics.OpenGL;
 namespace _3D_viewer.ViewModels
 {
     internal class VaoManager
@@ -21,18 +14,18 @@ namespace _3D_viewer.ViewModels
         /// <summary>Вызвать при загрузке OpenGL</summary>
         public VaoManager(string vertexfile, string fragmentfile)
         {
-            
+
             VAOs = new List<VAO>();
             currentVAO = new List<int>();
             shaderProgram = new ShaderProgram(vertexfile, fragmentfile);
             InitiVboIndex(0);
             InitiVAOId(0);
-            
+
         }
         public void DeleteVAO(int ID)
         {
             GL.DeleteVertexArray(VAOIds[ID]);
-           // VAOs[ID].Delete((uint)ID);
+            // VAOs[ID].Delete((uint)ID);
             VAOs.RemoveAt(ID);
             VAOCount--;
         }
@@ -68,11 +61,11 @@ namespace _3D_viewer.ViewModels
         }
         public void Draw()
         {
-              for (int i = 0; i < VAOCount; i++)
-              {
-                  VAOs[i].Draw(shaderProgram);
-              }   
-            
+            for (int i = 0; i < VAOCount; i++)
+            {
+                VAOs[i].Draw(shaderProgram);
+            }
+
         }
         public void SetCurrentModel(List<int> Models)
         {
@@ -82,6 +75,6 @@ namespace _3D_viewer.ViewModels
                 currentVAO.Add(Models[i]);
             }
         }
-        
+
     }
 }

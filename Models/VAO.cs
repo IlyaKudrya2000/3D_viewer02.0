@@ -1,12 +1,3 @@
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
-
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
@@ -37,9 +28,9 @@ namespace _3D_viewer.Models
         // private const int ModelModFlag = 1;
         #region Получить Данные о положении модели
         /// <summary>0 - Local matrix , 1 - model matrix</summary>
-        public float[] GetAngle (string matrixName)
-        { 
-            
+        public float[] GetAngle(string matrixName)
+        {
+
             switch (matrixName)
             {
                 case "modelMatrix":
@@ -50,14 +41,14 @@ namespace _3D_viewer.Models
 
                 case "viewMatrix":
                     return AngleView;
-                
+
             }
             return new float[0];
         }
 
 
         /// <summary>0 - Local matrix , 1 - model matrix</summary>
-        public float[] GetPosition(string matrixName) 
+        public float[] GetPosition(string matrixName)
         {
             switch (matrixName)
             {
@@ -77,7 +68,7 @@ namespace _3D_viewer.Models
 
         #endregion
         #region Установщики положения в пространстве 
-        
+
         #region Матрица проекции
         public void SetProjectionMatrix(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance)
         {
@@ -87,7 +78,7 @@ namespace _3D_viewer.Models
         #region Вращение
         public void SetRotation(float angle, int axis, string matrixName)
         {
-            switch (matrixName) 
+            switch (matrixName)
             {
                 case "modelMatrix":
                     AngleModel[axis - 1] = axis == 0 ? AngleModel[axis - 1] : angle;
@@ -118,43 +109,43 @@ namespace _3D_viewer.Models
                     PositionView[axis - 1] = axis == 0 ? PositionView[axis - 1] : shift;
                     break;
             }
-            
+
         }
         #endregion
 
         #endregion
         public void RotateMatrix(float angle, int axis, string matrixName)
         {
-            
+
             switch (matrixName)
             {
                 case "modelMatrix":
-                    AngleModel[axis-1] +=  angle;
+                    AngleModel[axis - 1] += angle;
 
                     break;
                 case "localMatrix":
-                    AngleLocal[axis-1] += angle;
+                    AngleLocal[axis - 1] += angle;
 
                     break;
                 case "viewMatrix":
                     AngleView[axis - 1] += angle;
                     break;
-                    
+
             }
         }
-        public void ShiftMatrix(float shift ,int axis, string matrixName)
+        public void ShiftMatrix(float shift, int axis, string matrixName)
         {
             switch (matrixName)
             {
                 case "modelMatrix":
-                    PositionModel[axis-1] += shift;                   
+                    PositionModel[axis - 1] += shift;
                     break;
                 case "localMatrix":
                     PositionLocal[axis - 1] += shift;
                     break;
                 case "viewMatrix":
-                    PositionView[axis-1] += shift;
-                    
+                    PositionView[axis - 1] += shift;
+
                     break;
             }
         }
@@ -270,10 +261,10 @@ namespace _3D_viewer.Models
         }
         public void Delete(uint ID)
         {
-          //  GL.BindVertexArray(0);
+            //  GL.BindVertexArray(0);
             GL.DeleteVertexArray(ID);
         }
-        
+
 
 
     }

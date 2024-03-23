@@ -1,9 +1,6 @@
 using _3D_viewer.Commands;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Windows.Services.Maps;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Wpf;
 namespace _3D_viewer.ViewModels
 {
     internal class InformationAbout : BaseViewModel

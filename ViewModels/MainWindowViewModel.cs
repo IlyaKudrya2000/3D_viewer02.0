@@ -146,7 +146,7 @@ namespace _3D_viewer.ViewModels
         }
         #endregion
 
-        
+
         #region Команда вращение модели 
         private void OnSetRotateModelExecute(int axis, float angle)
         {
@@ -154,7 +154,7 @@ namespace _3D_viewer.ViewModels
             //List<float> axis = StringToAxisListCommandParameter(sender);
             for (int i = 0; i < CurrentIndexModel.Count; i++)
             {
-                _vaoManager.VAOs[CurrentIndexModel[i]].SetRotation(angle,axis, _CurrentMatrixMod);
+                _vaoManager.VAOs[CurrentIndexModel[i]].SetRotation(angle, axis, _CurrentMatrixMod);
             }
 
             GLViewModel.InvalidateVisual();
@@ -202,7 +202,7 @@ namespace _3D_viewer.ViewModels
         public string PositionX
         {
             get => _PositionX != string.Empty ? _PositionX : "0";
-                
+
             set
             {
                 Set(ref _PositionX, value != string.Empty ? value : "0");
@@ -210,7 +210,7 @@ namespace _3D_viewer.ViewModels
                 float numericValue;
                 if (float.TryParse(_PositionX, out numericValue))
                 {
-                     OnSetPositionModelExecute(axisX, numericValue); 
+                    OnSetPositionModelExecute(axisX, numericValue);
                 }
                 else
                 {
@@ -221,7 +221,7 @@ namespace _3D_viewer.ViewModels
         public string PositionY
         {
             get => _PositionY != string.Empty ? _PositionY : "0";
-            
+
             set
             {
                 Set(ref _PositionY, value != string.Empty ? value : "0");
@@ -241,7 +241,7 @@ namespace _3D_viewer.ViewModels
         {
             get => _PositionZ != string.Empty ? _PositionZ : "0";
 
-            
+
             set
             {
                 Set(ref _PositionZ, value != string.Empty ? value : "0");
@@ -249,7 +249,7 @@ namespace _3D_viewer.ViewModels
                 float numericValue;
                 if (float.TryParse(_PositionZ, out numericValue))
                 {
-                    OnSetPositionModelExecute(axisZ, numericValue);                  
+                    OnSetPositionModelExecute(axisZ, numericValue);
                 }
                 else
                 {
@@ -264,7 +264,7 @@ namespace _3D_viewer.ViewModels
         private string _AngleZ;
         public string AngleX
         {
-            get  =>  _AngleX != string.Empty ? _AngleX : "0";
+            get => _AngleX != string.Empty ? _AngleX : "0";
 
             set
             {
@@ -273,7 +273,7 @@ namespace _3D_viewer.ViewModels
                 float numericValue;
                 if (float.TryParse(_AngleX, out numericValue))
                 {
-                    OnSetRotateModelExecute(axisX, numericValue);                   
+                    OnSetRotateModelExecute(axisX, numericValue);
                 }
                 else
                 {
@@ -291,7 +291,7 @@ namespace _3D_viewer.ViewModels
                 float numericValue;
                 if (float.TryParse(_AngleY, out numericValue))
                 {
-                     OnSetRotateModelExecute(axisY, numericValue);
+                    OnSetRotateModelExecute(axisY, numericValue);
                 }
                 else
                 {
@@ -310,7 +310,7 @@ namespace _3D_viewer.ViewModels
                 float numericValue;
                 if (float.TryParse(_AngleZ, out numericValue))
                 {
-                    OnSetRotateModelExecute(axisZ, numericValue);            
+                    OnSetRotateModelExecute(axisZ, numericValue);
                 }
                 else
                 {
