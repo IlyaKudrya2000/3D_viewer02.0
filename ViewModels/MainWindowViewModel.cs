@@ -10,6 +10,10 @@ namespace _3D_viewer.ViewModels
 {
     internal class MainWindowViewModel : BaseViewModel
     {
+
+        const int axisX = 1;
+        const int axisY = 2;
+        const int axisZ = 3;
         #region Костыли надо как то исправить Отвечается за связь GL и ViewModel
         public GLWpfControl GLViewModel;
         #region Загрузка и рендер
@@ -45,12 +49,11 @@ namespace _3D_viewer.ViewModels
 
                 for (int i = 0; i < CurrentIndexModel.Count; i++)
                 {
-                    _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(0.2f * (float)Direction.X, 0, 1, 0.0f, _CurrentMatrixMod);
-                    _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(0.2f * (float)Direction.Y, 1, 0, 0.0f, _CurrentMatrixMod);
-                    //list3DModel.informationAbout[CurrentIndexModel[i]].RotationXYZ = (string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngleLocal())).Split(' ');
-                    AngleX = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(0)).Split(' ')[0];
-                    AngleY = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(0)).Split(' ')[1];
-                    AngleZ = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(0)).Split(' ')[2];
+                    _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(0.2f * (float)Direction.X, axisY, _CurrentMatrixMod);
+                    _vaoManager.VAOs[CurrentIndexModel[i]].RotateMatrix(0.2f * (float)Direction.Y, axisX, _CurrentMatrixMod);
+                    AngleX = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(_CurrentMatrixMod)).Split(' ')[0];
+                    AngleY = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(_CurrentMatrixMod)).Split(' ')[1];
+                    AngleZ = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(_CurrentMatrixMod)).Split(' ')[2];
 
                 }
                 GLViewModel.InvalidateVisual();
@@ -67,11 +70,11 @@ namespace _3D_viewer.ViewModels
                 for (int i = 0; i < CurrentIndexModel.Count; i++)
                 {
 
-                    _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0, -0.01f * 1 * (float)Direction.Y, 0.0f, _CurrentMatrixMod);
-                    _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0.01f * 1 * (float)Direction.X, 0, 0.0f, _CurrentMatrixMod);
-                    PositionX = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(0)).Split(' ')[0];
-                    PositionY = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(0)).Split(' ')[1];
-                    PositionZ = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(0)).Split(' ')[2];
+                    _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0.01f * (float)Direction.X, axisX, _CurrentMatrixMod);
+                    _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(-0.01f * (float)Direction.Y, axisY, _CurrentMatrixMod);
+                    PositionX = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(_CurrentMatrixMod)).Split(' ')[0];
+                    PositionY = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(_CurrentMatrixMod)).Split(' ')[1];
+                    PositionZ = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(_CurrentMatrixMod)).Split(' ')[2];
                 }
                 GLViewModel.InvalidateVisual();
             }
@@ -87,7 +90,7 @@ namespace _3D_viewer.ViewModels
             List<int> CurrentIndexModel = GetCurrentIndexModels();
             for (int i = 0; i < CurrentIndexModel.Count; i++)
             {
-                _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(0, 0, e.Delta / 100, "viewMatrix");
+                _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(e.Delta / 100, axisZ, _CurrentMatrixMod);
             }
             GLViewModel.InvalidateVisual();
         }
@@ -103,7 +106,16 @@ namespace _3D_viewer.ViewModels
         {
 
             _CurrentMatrixMod = (string)sender;
-            // OnPropertyChanged(PositionX);
+            List<int> CurrentIndexModel = GetCurrentIndexModels();
+            for (int i = 0; i < CurrentIndexModel.Count; i++)
+            {
+                AngleX = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(_CurrentMatrixMod)).Split(' ')[0];
+                AngleY = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(_CurrentMatrixMod)).Split(' ')[1];
+                AngleZ = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetAngle(_CurrentMatrixMod)).Split(' ')[2];
+                PositionX = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(_CurrentMatrixMod)).Split(' ')[0];
+                PositionY = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(_CurrentMatrixMod)).Split(' ')[1];
+                PositionZ = string.Join(" ", _vaoManager.VAOs[CurrentIndexModel[i]].GetPosition(_CurrentMatrixMod)).Split(' ')[2];
+            }
 
         }
         private bool CanSetCurrentModelMatrixModExecute(object sender)
@@ -134,77 +146,31 @@ namespace _3D_viewer.ViewModels
         }
         #endregion
 
-        #region Команда смещения модели
-        public ICommand MoveModel { get; set; }
-        private void OnMoveModelExecute(object sender)
-        {
-            List<float> axisShift = StringToAxisListCommandParameter(sender);
-            List<int> CurrentIndexModel = GetCurrentIndexModels();
-            for (int i = 0; i < CurrentIndexModel.Count; i++)
-            {
-                _vaoManager.VAOs[CurrentIndexModel[i]].ShiftMatrix(axisShift[0] / 10, axisShift[1] / 10, axisShift[2] / 10, _CurrentMatrixMod);
-            }
-            GLViewModel.InvalidateVisual();
-
-        }
-        private bool CanMoveModelExecute(object sender)
-        {
-            return true;
-        }
-        #endregion
+        
         #region Команда вращение модели 
-        public ICommand RotateModel { get; set; }
-        private void OnRotateModelExecute(object sender)
+        private void OnSetRotateModelExecute(int axis, float angle)
         {
-            List<float> axis = StringToAxisListCommandParameter(sender);
             List<int> CurrentIndexModel = GetCurrentIndexModels();
-
+            //List<float> axis = StringToAxisListCommandParameter(sender);
             for (int i = 0; i < CurrentIndexModel.Count; i++)
             {
-                _vaoManager.VAOs[CurrentIndexModel[i]].SetLocalRotation(axis[3], axis[0], axis[1], axis[2]);
+                _vaoManager.VAOs[CurrentIndexModel[i]].SetRotation(angle,axis, _CurrentMatrixMod);
             }
 
             GLViewModel.InvalidateVisual();
-        }
-        private bool CanRotateModelExecute(object sender)
-        {
-            return true;
         }
         #endregion
         #region Команда установки положения модели 
-        public ICommand SetPositionModel { get; set; }
-        private void OnSetPositionModelExecute(object sender)
+        private void OnSetPositionModelExecute(int axis, float shift)
         {
-            List<float> axis = StringToAxisListCommandParameter(sender);
             List<int> CurrentIndexModel = GetCurrentIndexModels();
-
+            //List<float> axis = StringToAxisListCommandParameter(sender);
             for (int i = 0; i < CurrentIndexModel.Count; i++)
             {
-                _vaoManager.VAOs[CurrentIndexModel[i]].SetLocalPosition(axis[0], axis[1], axis[2]);
+                _vaoManager.VAOs[CurrentIndexModel[i]].SetPosition(shift, axis, _CurrentMatrixMod);
             }
 
             GLViewModel?.InvalidateVisual();
-        }
-        private bool CanSetPositionModelExecute(object sender)
-        {
-            return true;
-        }
-        #endregion
-        #region Команда установки матрицы модели (model matrix)
-        public ICommand SetModelMartrixCommand;
-        private void OnSetModelMartrixCommandExecute(object sender)
-        {
-            List<int> CurrentIndexModel = GetCurrentIndexModels();
-            List<float> axis = StringToAxisListCommandParameter(sender);
-            for (int i = 0; i < CurrentIndexModel.Count; i++)
-            {
-                _vaoManager.VAOs[CurrentIndexModel[i]].SetModelMatrix(axis[0], axis[1], axis[2], axis[3]);
-            }
-            GLViewModel.InvalidateVisual();
-        }
-        private bool CanSetModelMartrixCommandExecute(object sender)
-        {
-            return true;
         }
         #endregion
         #endregion
@@ -235,63 +201,60 @@ namespace _3D_viewer.ViewModels
         private string _PositionZ;
         public string PositionX
         {
-
-            get
-            {
-                double numericValue;
-                if (double.TryParse(_PositionX, out numericValue))
-                {
-                    OnSetPositionModelExecute(_PositionX + " 0 0");
-                    return _PositionX;
-                }
-                else
-                {
-                    return "0";
-                }
-            }
+            get => _PositionX != string.Empty ? _PositionX : "0";
+                
             set
             {
                 Set(ref _PositionX, value != string.Empty ? value : "0");
+
+                float numericValue;
+                if (float.TryParse(_PositionX, out numericValue))
+                {
+                     OnSetPositionModelExecute(axisX, numericValue); 
+                }
+                else
+                {
+                    _PositionX = "0";
+                }
             }
         }
         public string PositionY
         {
-            get
-            {
-                double numericValue;
-                if (double.TryParse(_PositionY, out numericValue))
-                {
-                    OnSetPositionModelExecute("0 " + _PositionY + " 0");
-                    return _PositionY;
-                }
-                else
-                {
-                    return "0";
-                }
-            }
+            get => _PositionY != string.Empty ? _PositionY : "0";
+            
             set
             {
                 Set(ref _PositionY, value != string.Empty ? value : "0");
+
+                float numericValue;
+                if (float.TryParse(_PositionY, out numericValue))
+                {
+                    OnSetPositionModelExecute(axisY, numericValue);
+                }
+                else
+                {
+                    _PositionY = "0";
+                }
             }
         }
         public string PositionZ
         {
-            get
-            {
-                double numericValue;
-                if (double.TryParse(_PositionZ, out numericValue))
-                {
-                    OnSetPositionModelExecute("0 0 " + _PositionZ);
-                    return _PositionZ;
-                }
-                else
-                {
-                    return "0";
-                }
-            }
+            get => _PositionZ != string.Empty ? _PositionZ : "0";
+
+            
             set
             {
                 Set(ref _PositionZ, value != string.Empty ? value : "0");
+
+                float numericValue;
+                if (float.TryParse(_PositionZ, out numericValue))
+                {
+                    OnSetPositionModelExecute(axisZ, numericValue);                  
+                }
+                else
+                {
+                    _PositionZ = "0";
+                }
             }
         }
         #endregion
@@ -301,29 +264,58 @@ namespace _3D_viewer.ViewModels
         private string _AngleZ;
         public string AngleX
         {
-            get => _AngleX;
+            get  =>  _AngleX != string.Empty ? _AngleX : "0";
+
             set
             {
-                Set(ref _AngleX, value);
-                OnRotateModelExecute("1 0 0 " + value);
+                Set(ref _AngleX, value != string.Empty ? value : "0");
+
+                float numericValue;
+                if (float.TryParse(_AngleX, out numericValue))
+                {
+                    OnSetRotateModelExecute(axisX, numericValue);                   
+                }
+                else
+                {
+                    _AngleX = "0";
+                }
             }
         }
         public string AngleY
         {
-            get => _AngleY;
+            get => _AngleY != string.Empty ? _AngleY : "0";
+
             set
             {
-                Set(ref _AngleY, value);
-                OnRotateModelExecute("0 1 0 " + value);
+                Set(ref _AngleY, value != string.Empty ? value : "0");
+                float numericValue;
+                if (float.TryParse(_AngleY, out numericValue))
+                {
+                     OnSetRotateModelExecute(axisY, numericValue);
+                }
+                else
+                {
+                    _AngleY = "0";
+                }
             }
         }
         public string AngleZ
         {
-            get => _AngleZ;
+            get => _AngleZ != string.Empty ? _AngleZ : "0";
+
             set
             {
-                Set(ref _AngleZ, value);
-                OnRotateModelExecute("0 0 1 " + value);
+                Set(ref _AngleZ, value != string.Empty ? value : "0");
+
+                float numericValue;
+                if (float.TryParse(_AngleZ, out numericValue))
+                {
+                    OnSetRotateModelExecute(axisZ, numericValue);            
+                }
+                else
+                {
+                    _AngleZ = "0";
+                }
             }
         }
         #endregion
@@ -370,13 +362,16 @@ namespace _3D_viewer.ViewModels
         {
 
             AddObjFileCommand = new LambdaCommand(OnAddObjFileCommandExecuted, CanAddObjFileCommandExecuted);
-            MoveModel = new LambdaCommand(OnMoveModelExecute, CanMoveModelExecute);
-            RotateModel = new LambdaCommand(OnRotateModelExecute, CanRotateModelExecute);
             SetModelMartixModCommand = new LambdaCommand(OnSetCurrentModelMartixModExecute, CanSetCurrentModelMatrixModExecute);
-            SetPositionModel = new LambdaCommand(OnSetPositionModelExecute, CanSetPositionModelExecute);
             _list3DModel = new List3DModel();
             Height = 500;
             Width = 700;
+            _AngleZ = "0";
+            _AngleY = "0";
+            _AngleX = "0";
+            _PositionX = "0";
+            _PositionY = "0";
+            _PositionZ = "0";
 
         }
 

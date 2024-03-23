@@ -33,15 +33,46 @@ namespace _3D_viewer.Models
         private float[] PositionLocal;
         private float[] PositionModel;
         private float[] PositionView;
-        private const int localModFlag = 0;
-        private const int ModelModFlag = 1;
+        // private const int localModFlag = 0;
+        // private const int ModelModFlag = 1;
         #region Получить Данные о положении модели
         /// <summary>0 - Local matrix , 1 - model matrix</summary>
-        public float[] GetAngle(int modFlag = ModelModFlag) => modFlag == localModFlag ? AngleLocal : AngleModel;
+        public float[] GetAngle (string matrixName)
+        { 
+            
+            switch (matrixName)
+            {
+                case "modelMatrix":
+                    return AngleModel;
+
+                case "localMatrix":
+                    return AngleLocal;
+
+                case "viewMatrix":
+                    return AngleView;
+                
+            }
+            return new float[0];
+        }
 
 
         /// <summary>0 - Local matrix , 1 - model matrix</summary>
-        public float[] GetPosition(int modFlag = ModelModFlag) => modFlag == localModFlag ? PositionLocal : PositionModel;
+        public float[] GetPosition(string matrixName) 
+        {
+            switch (matrixName)
+            {
+                case "modelMatrix":
+                    return PositionModel;
+
+                case "localMatrix":
+                    return PositionLocal;
+
+                case "viewMatrix":
+                    return PositionView;
+
+            }
+            return new float[0];
+        }
 
 
         #endregion
@@ -53,84 +84,76 @@ namespace _3D_viewer.Models
             Matrix4.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, (float)Math.Pow(10, 35), out projectionMatrix);
         }
         #endregion
-        public void SetModelMatrix(float angle, float axisX, float axisY, float axisZ)
-        {
-            modelMatrix = Matrix4.CreateFromAxisAngle(new Vector3(axisX, axisY, axisZ), 0.0175f * angle);
-        }
         #region Вращение
-        public void SetLocalRotation(float angle, float axisX, float axisY, float axisZ)
+        public void SetRotation(float angle, int axis, string matrixName)
         {
-            AngleLocal[0] = axisX == 0 ? AngleLocal[0] : angle * axisX;
-            AngleLocal[1] = axisY == 0 ? AngleLocal[1] : angle * axisY;
-            AngleLocal[2] = axisZ == 0 ? AngleLocal[2] : angle * axisZ;
+            switch (matrixName) 
+            {
+                case "modelMatrix":
+                    AngleModel[axis - 1] = axis == 0 ? AngleModel[axis - 1] : angle;
+                    break;
+
+                case "localMatrix":
+                    AngleLocal[axis - 1] = axis == 0 ? AngleLocal[axis - 1] : angle;
+                    break;
+
+                case "viewMatrix":
+                    AngleView[axis - 1] = axis == 0 ? AngleView[axis - 1] : angle;
+                    break;
+            }
         }
-        public void SetLocalPosition(float axisX, float axisY, float axisZ)
+        public void SetPosition(float shift, int axis, string matrixName)
         {
-            PositionLocal[0] = axisX == 0 ? PositionLocal[0] : axisX;
-            PositionLocal[1] = axisY == 0 ? PositionLocal[1] : axisY;
-            PositionLocal[2] = axisZ == 0 ? PositionLocal[2] : axisZ;
-        }
-        public void SetModelRotation(float angle, float axisX, float axisY, float axisZ)
-        {
-            AngleModel[0] = axisX * angle;
-            AngleModel[1] = axisY * angle;
-            AngleModel[2] = axisZ * angle;
+            switch (matrixName)
+            {
+                case "modelMatrix":
+                    PositionModel[axis - 1] = axis == 0 ? PositionModel[axis - 1] : shift;
+                    break;
+
+                case "localMatrix":
+                    PositionLocal[axis - 1] = axis == 0 ? PositionLocal[axis - 1] : shift;
+                    break;
+
+                case "viewMatrix":
+                    PositionView[axis - 1] = axis == 0 ? PositionView[axis - 1] : shift;
+                    break;
+            }
+            
         }
         #endregion
-        #region Положение
-        public void SetModelPosition(float axisXPos, float axisYPos, float axisZPos)
-        {
-            AngleModel[0] = axisXPos;
-            AngleModel[1] = axisYPos;
-            AngleModel[2] = axisZPos;
-        }
-        
+
         #endregion
-        #endregion
-        public void RotateMatrix(float angle, float axisX, float axisY, float axisZ, string matrixName)
+        public void RotateMatrix(float angle, int axis, string matrixName)
         {
-            Vector3 rotate = new Vector3(axisX, axisY, axisZ);
             
             switch (matrixName)
             {
                 case "modelMatrix":
-                    AngleModel[0] += axisX * angle;
-                    AngleModel[1] += axisY * angle;
-                    AngleModel[2] += axisZ * angle;
-                   // modelMatrix = modelMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
+                    AngleModel[axis-1] +=  angle;
+
                     break;
                 case "localMatrix":
-                    AngleLocal[0] += axisX * angle;
-                    AngleLocal[1] += axisY * angle;
-                    AngleLocal[2] += axisZ * angle;
-                   // localMatrix = localMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
+                    AngleLocal[axis-1] += angle;
+
                     break;
                 case "viewMatrix":
-                    //viewMatrix = viewMatrix * Matrix4.CreateFromAxisAngle(rotate, angle);
+                    AngleView[axis - 1] += angle;
                     break;
                     
             }
         }
-        public void ShiftMatrix(float x, float y, float z, string matrixName)
+        public void ShiftMatrix(float shift ,int axis, string matrixName)
         {
             switch (matrixName)
             {
                 case "modelMatrix":
-                    PositionModel[0] += x;
-                    PositionModel[1] += y;
-                    PositionModel[2] += z;
-                   // modelMatrix = modelMatrix * Matrix4.CreateTranslation(x, y, z);
+                    PositionModel[axis-1] += shift;                   
                     break;
                 case "localMatrix":
-                    PositionLocal[0] += x;
-                    PositionLocal[1] += y;
-                    PositionLocal[2] += z;
-                  //  localMatrix = localMatrix * Matrix4.CreateTranslation(x, y, z) ;
+                    PositionLocal[axis - 1] += shift;
                     break;
                 case "viewMatrix":
-                    PositionView[0] += x;
-                    PositionView[1] += y;
-                    PositionView[2] += z;
+                    PositionView[axis-1] += shift;
                     
                     break;
             }
@@ -202,7 +225,11 @@ namespace _3D_viewer.Models
                 * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), AngleLocal[0] * (float)Math.PI / 180)
                 * Matrix4.CreateTranslation(PositionLocal[0], PositionLocal[1], PositionLocal[2]);
 
-            viewMatrix = Matrix4.CreateTranslation(PositionView[0], PositionView[1], PositionView[2]);
+            viewMatrix =
+                  Matrix4.CreateFromAxisAngle(new Vector3(0, 0, 1), AngleView[2] * (float)Math.PI / 180)
+                * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), AngleView[1] * (float)Math.PI / 180)
+                * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), AngleView[0] * (float)Math.PI / 180)
+                * Matrix4.CreateTranslation(PositionView[0], PositionView[1], PositionView[2]);
             shaderProgram.SetUniform4("projection", projectionMatrix);
             shaderProgram.SetUniform4("model", modelMatrix);
             shaderProgram.SetUniform4("view", viewMatrix);

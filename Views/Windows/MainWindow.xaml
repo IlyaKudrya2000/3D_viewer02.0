@@ -72,7 +72,7 @@
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
-        <!--<Grid Width="119" Height="123" Background="White" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+        <Grid Width="119" Height="123" Background="White" VerticalAlignment="Bottom" HorizontalAlignment="Right">
             <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Text="{Binding AngleX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
             <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Center" Width="120" Text="{Binding AngleY, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
             <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Bottom" Width="120" Text="{Binding  AngleZ, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
@@ -83,12 +83,12 @@
             <TextBox HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Bottom" Width="120" Text="{Binding  PositionZ, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
         </Grid>
         <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="140" Height="144">
-        </Grid>-->
+        </Grid>
 
         <Grid Height="111" Width="106" HorizontalAlignment="Left" VerticalAlignment="Center">
             <RadioButton x:Name="localMatrix" Content="Local" VerticalAlignment="Top" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="localMatrix"  />
             <RadioButton x:Name="modelMatrix" Content="Model" VerticalAlignment="Center" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="modelMatrix" />
-            <!--<RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>-->
+            <RadioButton x:Name="viewMatrix" Content="View" VerticalAlignment="Bottom" Foreground="White" Command="{Binding SetModelMartixModCommand}" CommandParameter="viewMatrix"/>
         </Grid>
 
 
